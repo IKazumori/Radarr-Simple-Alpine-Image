@@ -6,7 +6,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/radarr
 
 jobs:
   build-and-push:
@@ -39,7 +38,7 @@ jobs:
           context: .
           file: ./Containerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.RADARR_VERSION }}
+          tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/radarr:${{ steps.get_version.outputs.RADARR_VERSION }}
           build-args: |
             RADARR_VERSION=${{ steps.get_version.outputs.RADARR_VERSION }}
 
