@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 env:
-  REGISTRY: ghcr.io
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/radarr
 
 jobs:
   build-and-push:
@@ -17,6 +17,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Lowercase repository
+        run: |
+          echo "IMAGE_NAME_LC=${IMAGE_NAME,,}" >> ${GITHUB_ENV}
 
       - name: Fetch version from script
         id: get_version
@@ -38,7 +42,7 @@ jobs:
           context: .
           file: ./Containerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/radarr:${{ steps.get_version.outputs.RADARR_VERSION }}
+          tags: ${{ env.IMAGE_NAME_LC }}:${{ steps.get_version.outputs.RADARR_VERSION }}
           build-args: |
             RADARR_VERSION=${{ steps.get_version.outputs.RADARR_VERSION }}
 
